@@ -4,13 +4,14 @@ import { useUserStore } from '@/store/user-store';
 import { QuizController } from '@/components/quiz/QuizController';
 import questionsData from '@/data/questions.json';
 import Link from 'next/link';
+import type { Question } from '@/lib/types';
 
 export default function ReviewPage() {
   const { wrongAnswerIds } = useUserStore();
 
   const reviewQuestions = questionsData.questions.filter(q =>
     wrongAnswerIds.includes(q.id)
-  );
+  ) as Question[];
 
   if (reviewQuestions.length === 0) {
     return (
