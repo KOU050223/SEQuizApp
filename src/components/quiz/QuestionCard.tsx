@@ -16,9 +16,11 @@ export function QuestionCard({ question, questionNumber, totalQuestions }: Quest
         <h2 className="text-xl font-bold mb-2">
           【問{question.id}】{question.title}
         </h2>
-        <div className="text-sm text-gray-600 mb-2">
-          掲載ページ: {question.page}
-        </div>
+        {question.page != null && (
+          <div className="text-sm text-gray-600 mb-2">
+            掲載ページ: {question.page}
+          </div>
+        )}
         <div className="text-sm text-gray-600">
           {question.source.examType} {question.source.year} {question.source.season} {question.source.section}・{question.source.number}
         </div>
