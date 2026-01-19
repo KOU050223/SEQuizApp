@@ -7,6 +7,7 @@ export interface Question {
   choices: string[];
   correctAnswer: number;  // 0-indexed
   explanation?: string;
+  page: number;
 }
 
 export interface ExamSource {
