@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useUserStore } from '@/store/user-store';
 import { QuizController } from '@/components/quiz/QuizController';
 import questionsData from '@/data/questions.json';
@@ -8,6 +9,22 @@ import type { Question } from '@/lib/types';
 
 export default function ReviewPage() {
   const { wrongAnswerIds } = useUserStore();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 text-center">
+        <div className="bg-white rounded-lg shadow-md p-12">
+          <div className="text-6xl mb-4">⏳</div>
+          <h2 className="text-2xl font-bold mb-4">読み込み中...</h2>
+        </div>
+      </div>
+    );
+  }
 
   const reviewQuestions = questionsData.questions.filter(q =>
     wrongAnswerIds.includes(q.id)

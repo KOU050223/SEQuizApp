@@ -1,13 +1,20 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useUserStore } from '@/store/user-store';
 import questionsData from '@/data/questions.json';
 
 export default function Home() {
   const { wrongAnswerIds, stats } = useUserStore();
+  const [isClient, setIsClient] = useState(false);
   const totalQuestions = questionsData.questions.length;
-  const accuracy = stats.totalAnswered > 0
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const accuracy = isClient && stats.totalAnswered > 0
     ? Math.round((stats.totalCorrect / stats.totalAnswered) * 100)
     : 0;
 
@@ -23,7 +30,7 @@ export default function Home() {
             </div>
             <div className="flex justify-between">
               <span>解答数</span>
-              <span className="font-bold">{stats.totalAnswered}問</span>
+              <span className="font-bold">{isClient ? stats.totalAnswered : 0}問</span>
             </div>
             <div className="flex justify-between">
               <span>正答率</span>
@@ -31,7 +38,7 @@ export default function Home() {
             </div>
             <div className="flex justify-between">
               <span>間違えた問題</span>
-              <span className="font-bold text-red-500">{wrongAnswerIds.length}問</span>
+              <span className="font-bold text-red-500">{isClient ? wrongAnswerIds.length : 0}問</span>
             </div>
           </div>
         </div>
@@ -48,14 +55,14 @@ export default function Home() {
           <Link
             href="/review"
             className={`block font-bold py-6 px-6 rounded-lg text-center transition-colors ${
-              wrongAnswerIds.length > 0
+              isClient && wrongAnswerIds.length > 0
                 ? 'bg-orange-500 hover:bg-orange-600 text-white'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed pointer-events-none'
             }`}
           >
             <div className="text-2xl mb-2">🔄 復習モード</div>
             <div className="text-sm opacity-90">
-              {wrongAnswerIds.length > 0
+              {isClient && wrongAnswerIds.length > 0
                 ? `間違えた${wrongAnswerIds.length}問を復習`
                 : '間違えた問題はありません'}
             </div>
